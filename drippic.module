@@ -2,6 +2,8 @@
 
 function drippic_init(){
 	global $user;
+
+	// If the user is neither anonymous nor super user, log the user out.
 	if($user->uid != 1 && $user->uid != 0){
   	watchdog('user', 'Session closed for %name.', array('%name' => $user->name));
 
