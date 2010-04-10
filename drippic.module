@@ -42,6 +42,10 @@ function drippic_upload($function = null){
 	
 	$output = '<?xml version="1.0" encoding="UTF-8"?>';
 
+	$response = array(
+		'key' => 'rsp',
+	);
+
 	if(isset($username) && isset($password) && isset($tweet) && isset($media)){
   	$account = drippic_load_twitter_user($username,$password);
 		//if(!$account){
@@ -61,25 +65,34 @@ function drippic_upload($function = null){
 					}
 					$data = drippic_twitter_tweet($username,$password,$post);	
 				}
-				
-				$output .= '<rsp stat="ok">';
-				$output .= '<mediaid>' . $nid . '</mediaid>';
-				$url = drippic_tinyurl('node/' . $nid);
-				$output .= '<mediaurl>' . $url . '</mediaurl>';
-				$output .= '</rsp>';
+
+				$response['attributes'] = array(
+					'stat' => 'ok',
+				);
+				$response['value'] = array(
+					'mediaid' => $nid,
+					'mediaurl' => drippic_tinyurl('node/' . $nid),
+				);
 			}
 			else{
-				$output .= '<rsp stat="fail">';
-				$output .= '<error>No nid returned</error>';
-				$output .= '</rsp>';
+				$response['attributes'] = array(
+					'stat' => 'fail',
+				);
+				$response['value'] = array(
+					'error' => 'No nid returned',
+				);
 			}
 		//}
 	}
 	else{
-		$output .= '<rsp stat="fail">';
-		$output .= '<error>Make sure username, password, message and media vars are sent.</error>';
-		$output .= '</rsp>';
+		$response['attributes'] = array(
+			'stat' => 'fail',
+		);
+		$response['value'] = array(
+			'error' => 'Make sure username, password, message and media vars are sent.',
+		);
 	}
+	$output .= format_xml_elements(array($response));
 	
 	header ("Content-Type:text/xml");  
 	print $output;
