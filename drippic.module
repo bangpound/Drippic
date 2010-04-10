@@ -53,7 +53,7 @@ function drippic_upload($function = null){
 			$nid = drippic_create_node($tweet ,$media);
 			if(isset($nid)){
 				if($function == 'tweet'){
-				  $url = drippic_tinyurl($base_url . '/node/' . $nid);
+				  $url = drippic_tinyurl('node/' . $nid);
 					$post = $tweet . ' ' . $url;
 					while(strlen($post) > 140){
 						$tweet = substr($tweet, 0, -4);
@@ -64,7 +64,7 @@ function drippic_upload($function = null){
 				
 				$output .= '<rsp stat="ok">';
 				$output .= '<mediaid>' . $nid . '</mediaid>';
-				$url = drippic_tinyurl($base_url . '/node/' . $nid);
+				$url = drippic_tinyurl('node/' . $nid);
 				$output .= '<mediaurl>' . $url . '</mediaurl>';
 				$output .= '</rsp>';
 			}
@@ -210,7 +210,7 @@ function drippic_comment_form_submit($form, &$form_state) {
 	$twitter_password = $form_state['values']['twitter_password'];
 	$tweet = $form_state['values']['comment'];
 	$node = node_load($form_state['values']['nid']);
-	$url = drippic_tinyurl($base_url . '/node/' . $form_state['values']['nid']);
+	$url = drippic_tinyurl('node/'. $form_state['values']['nid']);
 	$post = '@' . $node->name . ' ' . $tweet . ' ' . $url;
 	while(strlen($post) > 140){
 		$tweet = substr($tweet, 0, -4);
@@ -232,7 +232,7 @@ function drippic_twitter_tweet($username,$password, $tweet){
 }
 
 function drippic_tinyurl($url){
-		$result = file_get_contents("http://tinyurl.com/api-create.php?url=" . $url);
+		$result = file_get_contents("http://tinyurl.com/api-create.php?url=" . url($url, array('absolute' => TRUE)));
 		return $result;
 }
 ?>
