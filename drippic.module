@@ -1,4 +1,20 @@
 <?php
+// $Id$
+
+/**
+ * @file
+ * Drippic is a Twitter photo app built on Drupal.
+ *
+ * This is the main module for the app containing all the main hooks and functions.
+ */
+
+/**
+ * Implementation if hook_init()
+ *
+ * To get over storing plain text twitter passwords (and until oauth integration is added)
+ * all users are logged out at each page load and asked to login when posting photos and comments.
+ *
+ */
 
 function drippic_init(){
 	global $user;
@@ -17,8 +33,11 @@ function drippic_init(){
   	$user = drupal_anonymous_user();
 	}
 }
+
 /*
  * Implementiation of hook_menu()
+ *
+ * drippic/upload - The main Drippic upload API url (by adding /tweet the post will also be sent to twitter)
  */
 function drippic_menu(){	
   $items = array();
@@ -33,9 +52,21 @@ function drippic_menu(){
   return $items;
 }
 
+/**
+ * Page callback for drippic/upload
+ *
+ * @param $function
+ *   Other functions to call within the page callback.
+ *   tweet - Sends the post to Twitter.
+ *
+ * @return
+ *   XML response of successful or failed upload.
+ */
+
 function drippic_upload($function = null){
   global $base_url;
 
+	// The vars send by Tweetie for iPhone.
 	$username = $_POST['username'];
 	$password = $_POST['password'];
 	$source = $_POST['source'];

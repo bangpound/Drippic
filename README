@@ -1,5 +1,15 @@
 Drippic
 =======
+dependencies
+-------------
+content
+content_copy
+filefield
+imagefield
+
+It is important to make sure these are enabled before installing Drippic, to ensure the "pic" content type is copied correctly.
+
+Comment module is not a dependency, but by enabling it and adding commenting to the "pic" content type you can allow commenting on your photos. These comments are sent back to Twitter as an @ reply to the photo author.
 
 API References
 --------------
